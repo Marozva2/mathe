@@ -5,7 +5,8 @@ from flask_marshmallow import Marshmallow
 
 from models import db
 
-# from routes.auth_bp import jwt, bcrypt
+from routes.auth_bp import jwt, bcrypt
+from routes.user_bp import user_bp
 
 
 def create_app():
@@ -15,10 +16,13 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)
-    # jwt.init_app(app)
-    # bcrypt.init_app(app)
+    jwt.init_app(app)
+    bcrypt.init_app(app)
     ma = Marshmallow(app)
     migrate = Migrate(app, db)
+
+    app.register_blueprint(user_bp)
+
     CORS(app, resources={r"*": {"origins": "*"}})
     return app
 
