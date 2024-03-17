@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask_bcrypt import Bcrypt
 from flask_restful import Api, Resource, abort, reqparse
-from flask_jwt_extended import create_access_token, JWTManager
+from flask_jwt_extended import create_access_token, JWTManager, jwt_required, get_jwt_identity
 
 from models import User, db
 
@@ -9,6 +9,8 @@ auth_bp = Blueprint('auth_bp', __name__)
 bcrypt = Bcrypt()
 jwt = JWTManager()
 api = Api(auth_bp)
+
+blacklist = set()
 
 signUp_args = reqparse.RequestParser()
 signUp_args.add_argument('username', type=str,
@@ -51,8 +53,18 @@ class Login(Resource):
         if not bcrypt.check_password_hash(user.password, data['password']):
             return abort(403, detail="Incorrect password")
         token = create_access_token(identity=user.id)
-        return {"access_token": token, "user_id": user.id, "created_at": user.created_at.isoformat()}
+        return {"access_token": token, "user_id": user.id}
+
+
+class UserLogout(Resource):
+    @jwt_required()
+    def post(self):
+        jti = get_jwt_identity()
+        print(jti)
+        blacklist.add(jti)
+        return {"message": "Successfully logged out"}, 200
 
 
 api.add_resource(Login, '/login')
 api.add_resource(UserRegister, "/register")
+api.add_resource(UserLogout, '/logout')
