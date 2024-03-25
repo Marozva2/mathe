@@ -12,7 +12,7 @@ function Navbar() {
               to="#"
               className="text-xl font-bold text-white hover:text-gray-300"
             >
-              MATHE
+              Rafiki Service Hook
             </NavLink>
           </div>
           <div className="md:block">

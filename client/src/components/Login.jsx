@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Navbar from "./NavBar";
 
 function LogIn() {
   const [email, setEmail] = useState("");
@@ -47,6 +48,8 @@ function LogIn() {
   };
 
   return (
+    <>
+    <Navbar/>
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <form
         onSubmit={handleSubmit}
@@ -104,6 +107,7 @@ function LogIn() {
         </div>
       </form>
     </div>
+    </>
   );
 }
 
