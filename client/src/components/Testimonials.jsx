@@ -58,7 +58,7 @@ function Testimonials() {
                   "Great customer service and quick turnaround time. I'm
                   impressed with how clean and fresh my clothes came back!"
                 </p>
-                <p className="text-muted">- John Smith</p>
+                <p className="text-muted">- John Doe</p>
               </div>
             </motion.div>
           </div>

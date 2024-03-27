@@ -9,30 +9,25 @@ function Services() {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="bg-white rounded-lg shadow-md p-6 transition-transform duration-500 ease-in-out transform hover:scale-105">
-            <h5 className="text-xl font-bold text-gray-700 mb-4">
-              Laundry Pickup & Delivery
-            </h5>
+            <h5 className="text-xl font-bold text-gray-700 mb-4">Laundry</h5>
             <p className="text-gray-600">
-              Enjoy the convenience of our pickup and delivery service for your
-              laundry needs.
+              Entrust us with your laundry and experience top-notch cleaning
+              services.
             </p>
           </div>
           <div className="bg-white rounded-lg shadow-md p-6 transition-transform duration-500 ease-in-out transform hover:scale-105">
-            <h5 className="text-xl font-bold text-gray-700 mb-4">
-              Professional Dry Cleaning
-            </h5>
+            <h5 className="text-xl font-bold text-gray-700 mb-4">Plumbing</h5>
             <p className="text-gray-600">
-              Trust our experienced team for professional dry cleaning services
-              to keep your garments fresh and clean.
+              Trust our experienced team for professional plumbing services to
+              solve your household issues.
             </p>
           </div>
           <div className="bg-white rounded-lg shadow-md p-6 transition-transform duration-500 ease-in-out transform hover:scale-105">
-            <h5 className="text-xl font-bold text-gray-700 mb-4">
-              Tailoring & Alterations
-            </h5>
+            <h5 className="text-xl font-bold text-gray-700 mb-4">Lawning</h5>
             <p className="text-gray-600">
-              Need alterations or tailoring? We've got you covered with our
-              expert tailors who ensure the perfect fit.
+              Need help with maintaining your lawn? Our experts provide
+              comprehensive lawn care services to keep your yard looking its
+              best.
             </p>
           </div>
         </div>

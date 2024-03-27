@@ -1,15 +1,13 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Chart from "chart.js/auto";
 
 function Dashboard() {
   const [userData, setUserData] = useState(null);
-  const chart1Ref = useRef(null);
-  const chart2Ref = useRef(null);
+  const [recentActivity, setRecentActivity] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const userId = localStorage.getItem("userId"); // Get user ID from local storage
+    const userId = localStorage.getItem("userId");
     if (userId) {
       fetch(`http://127.0.0.1:5000/user/${userId}`)
         .then((response) => response.json())
@@ -21,37 +19,22 @@ function Dashboard() {
   }, []);
 
   useEffect(() => {
-    if (userData) {
-      console.log(userData);
-      if (chart1Ref.current) {
-        chart1Ref.current.destroy();
-      }
-      const ctx1 = document.getElementById("chart1").getContext("2d");
-      chart1Ref.current = new Chart(ctx1, {
-        type: "line",
-        data: {
-          // Your chart data for recent activity
-        },
-        options: {
-          // Your chart options
-        },
-      });
-
-      if (chart2Ref.current) {
-        chart2Ref.current.destroy();
-      }
-      const ctx2 = document.getElementById("chart2").getContext("2d");
-      chart2Ref.current = new Chart(ctx2, {
-        type: "bar",
-        data: {
-          // Your chart data for performance
-        },
-        options: {
-          // Your chart options
-        },
-      });
-    }
-  }, [userData]);
+    fetch("http://127.0.0.1:5000/laundryitems", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Unauthorized");
+        }
+        return response.json();
+      })
+      .then((data) => setRecentActivity(data))
+      .catch((error) =>
+        console.error("Error fetching recent activity:", error)
+      );
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -81,7 +64,7 @@ function Dashboard() {
         <ul>
           <li>
             <Link
-              to="#"
+              to=""
               className="flex items-center hover:bg-gray-700 py-2 transition duration-300"
             >
               <svg
@@ -99,23 +82,42 @@ function Dashboard() {
             </Link>
           </li>
           <li>
-            <Link
-              to="/profile"
-              className="flex items-center hover:bg-gray-700 py-2 transition duration-300"
-            >
-              <svg
-                className="h-6 w-6 mr-2 text-blue-500"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M5 11a1 1 0 1 0 0-2a1 1 0 0 0 0 2zm4 0a1 1 0 1 0 0-2a1 1 0 0 0 0 2zM15 11a1 1 0 1 0 0-2a1 1 0 0 0 0 2zM9 16a1 1 0 1 0 0-2a1 1 0 0 0 0 2zM19 16a1 1 0 1 0 0-2a1 1 0 0 0 0 2z"
-                  fill="currentColor"
-                />
-              </svg>
-              Profile
-            </Link>
+            <div className="relative">
+              <button className="flex items-center hover:bg-gray-700 py-2 transition duration-300">
+                <svg
+                  className="h-6 w-6 mr-2 text-blue-500"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M3 3h2l14 14v-2H3zm0 18h18v-2H3z"
+                    fill="currentColor"
+                  />
+                </svg>
+                Services
+              </button>
+              <div className="absolute z-10 bg-white py-2 mt-2 w-32 rounded-lg shadow-md">
+                <Link
+                  to="/dashboard/laundry"
+                  className="block px-4 py-2 text-gray-800 hover:bg-gray-200 transition duration-300"
+                >
+                  Laundry
+                </Link>
+                <Link
+                  to="/dashboard/lawning"
+                  className="block px-4 py-2 text-gray-800 hover:bg-gray-200 transition duration-300"
+                >
+                  Lawning
+                </Link>
+                <Link
+                  to="/dashboard/plumbing"
+                  className="block px-4 py-2 text-gray-800 hover:bg-gray-200 transition duration-300"
+                >
+                  Plumbing
+                </Link>
+              </div>
+            </div>
           </li>
         </ul>
         <div className="mt-auto">
@@ -155,7 +157,17 @@ function Dashboard() {
                 <h3 className="text-lg font-semibold mb-2 transition duration-300">
                   Recent Activity
                 </h3>
-                <canvas id="chart1"></canvas>
+                <div>
+                  {recentActivity.map((activity, index) => (
+                    <div key={index} className="mb-2">
+                      <p className="font-semibold">{activity.title}</p>
+                      <p className="text-gray-700">{activity.description}</p>
+                      <p className="text-sm text-gray-500">
+                        {activity.timestamp}
+                      </p>
+                    </div>
+                  ))}
+                </div>
               </div>
               <div className="bg-white rounded p-4 transform hover:scale-105 transition duration-300">
                 <h3 className="text-lg font-semibold mb-2 transition duration-300">
@@ -164,7 +176,6 @@ function Dashboard() {
                 <canvas id="chart2"></canvas>
               </div>
             </div>
-
             <div className="grid grid-cols-1 md:grid-cols-1 gap-3 mt-4">
               <div className="bg-white rounded p-4 transform hover:scale-104 transition duration-300">
                 <h3 className="text-lg font-semibold mb-2 transition duration-300">

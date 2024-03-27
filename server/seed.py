@@ -45,8 +45,8 @@ def seed_database():
         # Seed data for LaundryItem model
         laundry_items = [{
             "id": 1,
-            "name": "T-shirt",
-            "price": 10.99,
+            "number": 254712345678,
+            "location": "Kampi",
             "description": "Standard cotton T-shirt"
         }]
 

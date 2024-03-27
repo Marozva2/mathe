@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify
 from flask_restful import Api, reqparse, Resource, abort
 from flask_marshmallow import Marshmallow
 from flask_bcrypt import Bcrypt
+from flask_jwt_extended import jwt_required
 
 from models import LaundryItem, db
 
@@ -13,16 +14,16 @@ bcrypt = Bcrypt()
 api = Api(laundryitem_bp)
 
 post_args = reqparse.RequestParser()
-post_args.add_argument('name', type=str, required=True,
-                       help='Name is required')
-post_args.add_argument('price', type=float, required=True,
-                       help='Price is required')
+post_args.add_argument('number', type=int, required=True,
+                       help='Number is required')
+post_args.add_argument('location', type=str, required=True,
+                       help='Location is required')
 post_args.add_argument('description', type=str, required=True,
                        help='Description is required')
 
 patch_args = reqparse.RequestParser()
-patch_args.add_argument('name', type=str)
-patch_args.add_argument('price', type=float)
+patch_args.add_argument('number', type=int)
+patch_args.add_argument('location', type=str)
 patch_args.add_argument('description', type=str)
 
 laundryitem_schema = LaundryItemSchema(many=True)
@@ -30,6 +31,7 @@ laundryitem_schema_single = LaundryItemSchema()
 
 
 class LaundryItems(Resource):
+    @jwt_required()
     def get(self):
         laundry_items = LaundryItem.query.all()
         result = laundryitem_schema.dump(laundry_items, many=True)
@@ -38,11 +40,11 @@ class LaundryItems(Resource):
     def post(self):
         data = post_args.parse_args()
 
-        laundry_item = LaundryItem.query.filter_by(name=data['name']).first()
+        laundry_item = LaundryItem.query.filter_by(number=data['number']).first()
         if laundry_item:
-            abort(409, detail="Laundry item with the same name already exists")
+            abort(409, detail="Laundry item with the same number already exists")
 
-        new_laundry_item = LaundryItem(name=data['name'], price=data['price'],
+        new_laundry_item = LaundryItem(number=data['number'], location=data['location'],
                                        description=data['description'])
         db.session.add(new_laundry_item)
         db.session.commit()
@@ -52,6 +54,7 @@ class LaundryItems(Resource):
 
 
 class LaundryItemById(Resource):
+    @jwt_required()
     def get(self, id):
         single_laundry_item = LaundryItem.query.get(id)
         if not single_laundry_item:

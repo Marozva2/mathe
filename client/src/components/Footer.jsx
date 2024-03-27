@@ -1,17 +1,19 @@
+// Footer.js
+
 import React from "react";
 import { FaFacebook, FaTwitter, FaInstagram } from "react-icons/fa";
 
 function Footer() {
   return (
-    <footer className="bg-gray-900 text-white py-8">
+    <footer className="bg-gray-200 text-center text-md p-4 w-full">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="col-span-1">
             <h5 className="text-lg font-semibold mb-4">Contact Us</h5>
             <ul className="list-none">
-              <li className="mb-2">Phone: (123) 456-7890</li>
-              <li className="mb-2">Email: example@example.com</li>
-              <li>Address: 123 Street, City, Country</li>
+              <li className="mb-2">Phone: (254) 7407-805-24</li>
+              <li className="mb-2">Email: bredannduko@gmail.com</li>
+              <li>Address: Rafiki, Nakuru, Ke</li>
             </ul>
           </div>
           <div className="col-span-1">
@@ -37,8 +39,8 @@ function Footer() {
           <div className="col-span-1">
             <h5 className="text-lg font-semibold mb-4">About Us</h5>
             <p>
-              We are dedicated to providing the best laundry experiences. Lorem
-              ipsum dolor sit amet, consectetur adipiscing elit.
+              We are dedicated to providing the best laundry experiences. Come
+              join us!
             </p>
           </div>
         </div>

@@ -1,5 +1,4 @@
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
 
 db = SQLAlchemy()
 
@@ -30,8 +29,8 @@ class LaundryItem(db.Model):
     __tablename__ = 'laundryitems'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-    price = db.Column(db.Float)
+    number = db.Column(db.Integer)
+    location = db.Column(db.String)
     description = db.Column(db.String)
     orders = db.relationship('OrderItem', backref='item', lazy='dynamic')
 
@@ -42,7 +41,6 @@ class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     address_id = db.Column(db.Integer, db.ForeignKey('addresses.id'))
-    order_date = db.Column(db.DateTime, default=datetime.utcnow())
     status = db.Column(db.String, default='Pending')
     items = db.relationship('OrderItem', backref='order', lazy='dynamic')
 
