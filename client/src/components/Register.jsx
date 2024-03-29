@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Register() {
@@ -10,10 +10,12 @@ function Register() {
   const [formValid, setFormValid] = useState(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    checkFormValidity();
+  }, [username, password, email, confirmPassword]);
+
   const handleSignUp = async (event) => {
     event.preventDefault();
-
-    checkFormValidity();
 
     if (!formValid) {
       setError("Please fill in all required fields");

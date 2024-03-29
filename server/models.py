@@ -12,6 +12,7 @@ class User(db.Model):
     password = db.Column(db.String)
     orders = db.relationship('Order', backref='customer', lazy='dynamic')
     addresses = db.relationship('Address', backref='resident', lazy='dynamic')
+    laundryitems = db.relationship('LaundryItem', backref='owner', lazy='dynamic')
 
 
 class Address(db.Model):
@@ -32,6 +33,8 @@ class LaundryItem(db.Model):
     number = db.Column(db.Integer)
     location = db.Column(db.String)
     description = db.Column(db.String)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship("User", back_populates="laundryitems", overlaps="owner")
     orders = db.relationship('OrderItem', backref='item', lazy='dynamic')
 
 
