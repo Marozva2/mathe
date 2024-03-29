@@ -20,6 +20,7 @@ post_args.add_argument('location', type=str, required=True,
                        help='Location is required')
 post_args.add_argument('description', type=str, required=True,
                        help='Description is required')
+post_args.add_argument('user_id', type=str)
 
 patch_args = reqparse.RequestParser()
 patch_args.add_argument('number', type=int)
@@ -40,12 +41,12 @@ class LaundryItems(Resource):
     def post(self):
         data = post_args.parse_args()
 
-        laundry_item = LaundryItem.query.filter_by(number=data['number']).first()
-        if laundry_item:
-            abort(409, detail="Laundry item with the same number already exists")
+        # laundry_item = LaundryItem.query.filter_by(user_id=data['user_id']).first()
+        # if laundry_item:
+        #     abort(409, detail="Laundry item with the same number already exists")
 
         new_laundry_item = LaundryItem(number=data['number'], location=data['location'],
-                                       description=data['description'])
+                                       description=data['description'], user_id=data['user_id'])
         db.session.add(new_laundry_item)
         db.session.commit()
 

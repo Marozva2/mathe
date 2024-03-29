@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Chart from "chart.js/auto";
 
 function Dashboard() {
   const [userData, setUserData] = useState(null);
   const [recentActivity, setRecentActivity] = useState([]);
+  const statusChartInstanceRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,22 +21,98 @@ function Dashboard() {
   }, []);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/laundryitems", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Unauthorized");
-        }
-        return response.json();
+    const userId = localStorage.getItem("userId");
+    if (userId) {
+      fetch(`http://127.0.0.1:5000/laundryitem/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
       })
-      .then((data) => setRecentActivity(data))
-      .catch((error) =>
-        console.error("Error fetching recent activity:", error)
-      );
-  }, []);
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Unauthorized");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if (Array.isArray(data)) {
+            setRecentActivity(
+              data.map((item) => ({
+                title: item.number.toString(),
+                description: item.description,
+                timestamp: new Date().toISOString(),
+              }))
+            );
+          } else if (typeof data === "object") {
+            setRecentActivity([
+              {
+                title: data.number.toString(),
+                description: data.description,
+                timestamp: new Date().toISOString(),
+              },
+            ]);
+          } else {
+            console.error("Data is not in the expected format:", data);
+          }
+        })
+        .catch((error) =>
+          console.error("Error fetching recent activity:", error)
+        );
+    } else {
+      console.error("User ID not found in local storage.");
+    }
+  }, [localStorage.getItem("userId")]);
+
+  useEffect(() => {
+    const canvas = document.getElementById("statusChart");
+    if (canvas) {
+      const ctx = canvas.getContext("2d");
+
+      if (statusChartInstanceRef.current) {
+        statusChartInstanceRef.current.destroy();
+      }
+
+      const data = {
+        labels: ["Pending", "Approved"],
+        datasets: [
+          {
+            data: [1, 0],
+            backgroundColor: [
+              "rgba(255, 99, 132, 0.2)", // Red for pending
+              "rgba(54, 162, 235, 0.2)", // Blue for approved
+            ],
+            borderColor: ["rgba(255, 99, 132, 1)", "rgba(54, 162, 235, 1)"],
+            borderWidth: 1,
+          },
+        ],
+      };
+
+      const options = {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+      };
+
+      const statusChart = new Chart(ctx, {
+        type: "doughnut",
+        data: data,
+        options: options,
+      });
+
+      if (recentActivity.length > 0) {
+        const latestActivity = recentActivity[0];
+        if (latestActivity.description === "Approved") {
+          statusChart.data.datasets[0].data = [0, 1];
+        }
+        statusChart.update();
+      }
+
+      statusChartInstanceRef.current = statusChart;
+    }
+  }, [recentActivity]);
 
   const handleLogout = async () => {
     try {
@@ -152,35 +230,38 @@ function Dashboard() {
             <p className="text-gray-700 transition duration-300">
               Email: {userData.email}
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-              <div className="bg-white rounded p-4 transform hover:scale-105 transition duration-300">
-                <h3 className="text-lg font-semibold mb-2 transition duration-300">
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+              <div className="bg-white rounded p-2 md:p-4 transform hover:scale-105 transition duration-300">
+                <h2 className="text-lg md:text-xlg font-bold mb-2 underline transition duration-300">
                   Recent Activity
-                </h3>
+                </h2>
                 <div>
                   {recentActivity.map((activity, index) => (
                     <div key={index} className="mb-2">
-                      <p className="font-semibold">{activity.title}</p>
+                      <p className="font-semibold">Number:{activity.title}</p>
+                      Description:{" "}
                       <p className="text-gray-700">{activity.description}</p>
                       <p className="text-sm text-gray-500">
-                        {activity.timestamp}
+                        Date: {activity.timestamp.substring(0, 10)}
                       </p>
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="bg-white rounded p-4 transform hover:scale-105 transition duration-300">
-                <h3 className="text-lg font-semibold mb-2 transition duration-300">
-                  Performance
-                </h3>
-                <canvas id="chart2"></canvas>
+              <div className="bg-white rounded p-2 md:p-4 transform hover:scale-105 transition duration-300">
+                <h2 className="text-lg md:text-xlg font-bold mb-2 underline transition duration-300">
+                  Status
+                </h2>
+                <canvas id="statusChart"></canvas>
               </div>
             </div>
+
             <div className="grid grid-cols-1 md:grid-cols-1 gap-3 mt-4">
               <div className="bg-white rounded p-4 transform hover:scale-104 transition duration-300">
-                <h3 className="text-lg font-semibold mb-2 transition duration-300">
+                <h2 className="text-xlg font-bold mb-8 underline transition duration-300">
                   More Activities
-                </h3>
+                </h2>
                 <canvas id="chart1"></canvas>
               </div>
             </div>
