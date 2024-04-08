@@ -55,3 +55,28 @@ class OrderItem(db.Model):
     order_id = db.Column(db.Integer, db.ForeignKey('orders.id'))
     laundryitem_id = db.Column(db.Integer, db.ForeignKey('laundryitems.id'))
     quantity = db.Column(db.Integer)
+
+
+class Email(db.Model):
+    __tablename__ = 'emails'
+    email_id = db.Column(db.Integer, primary_key=True)
+    subject = db.Column(db.String)
+    body = db.Column(db.Text)
+    sender_email = db.Column(db.String)
+
+    serialize_only = ('email_id', 'subject', 'sender_email')
+
+    def __repr__(self):
+        return f"Email(email_id={self.email_id}, subject={self.subject}, sender_email={self.sender_email})"
+
+
+class MailingList(db.Model):
+    __tablename__ = 'mailing_list'
+    mailing_list_id = db.Column(db.Integer, primary_key=True)
+    email_id = db.Column(db.String, db.ForeignKey("emails.email_id", name="mailing_list_email_fk"), nullable=False)
+    user_id = db.Column(db.String, db.ForeignKey("users.id", name="mailing_list_user_fk"), nullable=False)
+
+    serialize_only = ('mailing_list_id', 'email_id', 'user_id')
+
+    def __repr__(self):
+        return f"MailingList(mailing_list_id={self.mailing_list_id}, email_id={self.email_id}, user_id={self.user_id})"

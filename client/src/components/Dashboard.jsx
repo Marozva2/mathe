@@ -102,17 +102,27 @@ function Dashboard() {
         options: options,
       });
 
-      if (recentActivity.length > 0) {
-        const latestActivity = recentActivity[0];
-        if (latestActivity.description === "Approved") {
-          statusChart.data.datasets[0].data = [0, 1];
-        }
-        statusChart.update();
-      }
-
       statusChartInstanceRef.current = statusChart;
     }
-  }, [recentActivity]);
+
+    // Change status to approved and update chart color after 5 seconds
+    const timeout = setTimeout(() => {
+      if (statusChartInstanceRef.current) {
+        statusChartInstanceRef.current.data.datasets[0].data = [0, 1];
+        statusChartInstanceRef.current.data.datasets[0].backgroundColor = [
+          "rgba(255, 99, 132, 0.2)",
+          "rgba(54, 162, 235, 0.2)", // Blue for approved
+        ];
+        statusChartInstanceRef.current.data.datasets[0].borderColor = [
+          "rgba(255, 99, 132, 1)",
+          "rgba(54, 162, 235, 1)",
+        ];
+        statusChartInstanceRef.current.update();
+      }
+    }, 5000);
+
+    return () => clearTimeout(timeout);
+  }, []);
 
   const handleLogout = async () => {
     try {
