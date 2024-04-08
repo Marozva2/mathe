@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -9,8 +9,26 @@ function Laundry() {
     description: "",
     location: "",
   });
-
+  const [userEmail, setUserEmail] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUserEmail = async () => {
+      try {
+        const userId = localStorage.getItem("userId");
+        const response = await fetch(`http://127.0.0.1:5000/user/${userId}`);
+        if (response.ok) {
+          const userData = await response.json();
+          setUserEmail(userData.email);
+        } else {
+          console.error("Failed to fetch user data");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+    fetchUserEmail();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,6 +36,31 @@ function Laundry() {
       ...prevState,
       [name]: value,
     }));
+  };
+
+  const sendEmail = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:5000/send-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+        body: JSON.stringify({
+          recipient_email: userEmail,
+          subject: "Laundry Service Request",
+          body: `Phone Number: ${formData.number}\nLocation: ${formData.location}\nDescription: ${formData.description}`,
+        }),
+      });
+
+      if (response.ok) {
+        console.log("Email sent successfully!");
+      } else {
+        console.error("Failed to send email.");
+      }
+    } catch (error) {
+      console.error("Error sending email:", error);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -41,8 +84,14 @@ function Laundry() {
         },
         body: JSON.stringify(formData),
       });
-      const data = await response.json();
-      console.log(data);
+
+      if (response.ok) {
+        // Send email upon successful laundry service submission
+        sendEmail();
+        console.log("Laundry service request submitted successfully!");
+      } else {
+        console.error("Failed to submit laundry service request.");
+      }
     } catch (error) {
       console.error("Error:", error);
     }

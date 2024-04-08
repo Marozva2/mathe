@@ -1,4 +1,4 @@
-from models import db, User, Address, LaundryItem, Order, OrderItem
+from models import db, User, Address, LaundryItem, Order, OrderItem, Email
 
 from app import create_app
 
@@ -80,6 +80,26 @@ def seed_database():
             order_item = OrderItem(**order_item_data)
             db.session.add(order_item)
             print("Order items added")
+
+        # Seed data for Email model
+        emails = [
+            {
+                "subject": "Welcome to our platform",
+                "body": "Thank you for joining us!",
+                "sender_email": "admin@example.com"
+            },
+            {
+                "subject": "Membership Renewal",
+                "body": "Renew your membership now.",
+                "sender_email": "admin@example.com"
+            }
+        ]
+
+        for email_data in emails:
+            email = Email(**email_data)
+            db.session.add(email)
+            print("Emails added!!!")
+
 
         # Commit all changes to the database
         db.session.commit()
