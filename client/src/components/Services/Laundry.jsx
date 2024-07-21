@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "./Header";
-import Footer from "./Footer";
+import Header from "../Home/Header";
+import Footer from "../Home/Footer";
 
 function Laundry() {
   const [formData, setFormData] = useState({

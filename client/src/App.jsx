@@ -1,14 +1,14 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LandingPage from "./components/LandingPage";
-import Dashboard from "./components/Dashboard";
-import LogIn from "./components/Login";
-import Register from "./components/Register";
-import Logout from "./components/Logout";
-import About from "./components/About";
-import Laundry from "./components/Laundry";
-import Lawning from "./components/Lawning";
-import Plumbing from "./components/Plumbing";
+import LandingPage from "./components/Home/LandingPage";
+import Dashboard from "./components/Dashboard/Dashboard";
+import LogIn from "./components/Auth/Login";
+import Register from "./components/Auth/Register";
+import Logout from "./components/Auth/Logout";
+import About from "./components/Home/About";
+import Laundry from "./components/Services/Laundry";
+import Lawning from "./components/Services/Lawning";
+import Plumbing from "./components/Services/Plumbing";
 
 function App() {
   return (

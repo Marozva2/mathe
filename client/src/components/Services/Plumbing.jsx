@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Header from "./Header";
-import Footer from "./Footer";
+import Header from "../Home/Header";
+import Footer from "../Home/Footer";
 
 function Laundry() {
   const [formData, setFormData] = useState({
