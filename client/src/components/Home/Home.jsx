@@ -4,7 +4,7 @@ import Header from './Header';
 function Home() {
   return (
     <div className='bg-[#56dffe] min-h-screen flex flex-col items-center'>
-      {/* <Header /> */}
+      <Header />
       <div className="text-white text-3xl italic m-20 text-center">
         Welcome to <span className="font-bold">Mathe</span>
       </div>
