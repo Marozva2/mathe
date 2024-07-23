@@ -9,6 +9,7 @@ import About from "./components/Home/About";
 import Laundry from "./components/Services/Laundry";
 import Lawning from "./components/Services/Lawning";
 import Plumbing from "./components/Services/Plumbing";
+import AdminDash from "./components/Dashboard/AdminDash";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
       <Routes>
         <Route path="/*" element={<LandingPage />} />
         <Route path="/about" element={<About />} />
+        <Route path="admindash" element={<AdminDash />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="dashboard/laundry" element={<Laundry />} />
         <Route path="dashboard/lawning" element={<Lawning />} />
