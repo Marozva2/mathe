@@ -15,7 +15,10 @@ function Home() {
       <div className="text-white text-3xl italic m-20 text-center">
         Welcome to <span className="font-bold">Mathe</span>
       </div>
-      <div className="text-white text-2xl mt-4 mb-10 text-center">
+      <div
+        className="text-white text-6xl mt-3 mb-10 text-center"
+        style={{ fontFamily: "'Shadows Into Light', cursive" }}
+      >
         Your reliable <br />
         door-to-door <br />
         laundry service!
