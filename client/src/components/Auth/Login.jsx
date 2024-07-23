@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../Home/NavBar";
+import Header from "../Home/Header";
+import image from "../../assets/images/image.png";
 
 function LogIn() {
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
@@ -12,16 +14,11 @@ function LogIn() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const formData = {
-        email,
-        password,
-      };
+      const formData = { email, password };
 
       const response = await fetch("http://127.0.0.1:5000/login", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
@@ -49,65 +46,68 @@ function LogIn() {
 
   return (
     <>
-      <Navbar />
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-        <form
-          onSubmit={handleSubmit}
-          className="w-full max-w-md mt-15 bg-white rounded-lg shadow-md overflow-hidden"
-        >
-          <div className="px-8 py-12">
-            <h2 className="text-4xl font-bold text-center text-gray-700 mb-8">
-              Sign In
-            </h2>
-            <input
-              type="text"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-            />
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-            />
-            <div className="flex items-center justify-between">
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={showPassword}
-                  onChange={(e) => setShowPassword(e.target.checked)}
-                  className="form-checkbox text-blue-500"
-                />
-                <span className="ml-2 text-sm text-gray-600">
-                  Show Password
-                </span>
-              </label>
-            </div>
-            {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
-          </div>
-          <div className="px-5 py-8 bg-gray-50">
-            <button
-              type="submit"
-              className="w-full py-2 px-4 text-center bg-blue-500 hover:bg-blue-700 text-white font-bold rounded"
-            >
-              Sign In
-            </button>
-            <div className="text-center mt-4">
-              Don't have an account?{" "}
-              <a
-                href="/register"
-                className="text-blue-500 hover:text-blue-700 underline"
+      <div className="h-screen bg-[#55d9ff]">
+        <Header />
+        <div className="flex">
+          <div className="w-1/2 flex justify-center p-5">
+            <form onSubmit={handleSubmit} className="w-full max-w-md">
+              <input
+                id="name"
+                name="name"
+                type="text"
+                placeholder="Name:"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                className="w-full p-2 mb-4 border bg-[#6c3838] rounded"
+                autoComplete="name"
+              />
+              <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="Email:"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full p-2 mb-4 border bg-[#6c3838] rounded"
+                autoComplete="email"
+              />
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Password:"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="w-full p-2 mb-4 border bg-[#6c3838] rounded"
+                autoComplete="current-password"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="w-full p-2 mb-4 bg-[#6c3838] text-white rounded hover:bg-blue-600"
               >
-                Sign up
-              </a>
-            </div>
+                {showPassword ? "Hide" : "Show"} Password
+              </button>
+              <div className="w-36 flex justify-center p-2 ml-16 mt-12 bg-[#6c3838] text-white rounded hover:bg-blue-600">
+                <button type="submit">Log In</button>
+              </div>
+              {error && (
+                <p className="text-red-500 text-center mt-4">{error}</p>
+              )}
+            </form>
           </div>
-        </form>
+          <div className="w-1/2 flex justify-center">
+            <img
+              src={image}
+              alt="Illustration"
+              className="object-cover"
+              style={{ width: 619, height: 670 }}
+            />
+          </div>
+        </div>
       </div>
     </>
   );
