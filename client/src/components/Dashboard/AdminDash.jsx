@@ -1,57 +1,106 @@
-import React from "react";
+import { Route, Routes, NavLink, Outlet } from "react-router-dom";
+import AdminDashboard from "./AdminDashboard";
+import Orders from "./Orders";
+import Registry from "./Registry";
+import Delivery from "./Delivery";
+import Mathe from "./Mathe";
+import Customers from "./Customers";
+import Settings from "./Settings";
 
 function AdminDash() {
   return (
     <div className="flex h-screen">
-      <aside className="w-1/5 bg-maroon text-white p-4 flex flex-col bg-[#6e3f41]">
+      <aside className="w-1/6 bg-maroon text-white p-4 flex flex-col bg-[#6e3f41]">
         <div className="flex items-center mb-8">
-          <div className="bg-gray-300 rounded-full h-12 w-12 flex items-center justify-center">
+          <div className="bg-gray-300 rounded-full h-12 w-12 flex items-center justify-center text-black">
             LOGO
           </div>
         </div>
         <nav className="flex flex-col space-y-12 font-bold">
-          <a
-            href="admin/dash"
-            className="text-white no-underline hover:bg-[#d9d9d9] hover:text-[#6e3f41] transition duration-300 p-2 rounded"
+          <NavLink
+            to="/admin/dash"
+            className={({ isActive }) =>
+              `text-white no-underline transition duration-300 p-2 rounded ${
+                isActive
+                  ? "bg-[#d9d9d9] text-[#6e3f41]"
+                  : "hover:bg-[#d9d9d9] hover:text-[#6e3f41]"
+              }`
+            }
           >
             Dashboard
-          </a>
-          <a
-            href="admin/orders"
-            className="text-white no-underline hover:bg-[#d9d9d9] hover:text-[#6e3f41] transition duration-300 p-2 rounded"
+          </NavLink>
+          <NavLink
+            to="/admin/orders"
+            className={({ isActive }) =>
+              `text-white no-underline transition duration-300 p-2 rounded ${
+                isActive
+                  ? "bg-[#d9d9d9] text-[#6e3f41]"
+                  : "hover:bg-[#d9d9d9] hover:text-[#6e3f41]"
+              }`
+            }
           >
             Orders
-          </a>
-          <a
-            href="admin/registry"
-            className="text-white no-underline hover:bg-[#d9d9d9] hover:text-[#6e3f41] transition duration-300 p-2 rounded"
+          </NavLink>
+          <NavLink
+            to="/admin/registry"
+            className={({ isActive }) =>
+              `text-white no-underline transition duration-300 p-2 rounded ${
+                isActive
+                  ? "bg-[#d9d9d9] text-[#6e3f41]"
+                  : "hover:bg-[#d9d9d9] hover:text-[#6e3f41]"
+              }`
+            }
           >
             Registry
-          </a>
-          <a
-            href="admin/delivery"
-            className="text-white no-underline hover:bg-[#d9d9d9] hover:text-[#6e3f41] transition duration-300 p-2 rounded"
+          </NavLink>
+          <NavLink
+            to="/admin/delivery"
+            className={({ isActive }) =>
+              `text-white no-underline transition duration-300 p-2 rounded ${
+                isActive
+                  ? "bg-[#d9d9d9] text-[#6e3f41]"
+                  : "hover:bg-[#d9d9d9] hover:text-[#6e3f41]"
+              }`
+            }
           >
             Delivery
-          </a>
-          <a
-            href="admin/mathe"
-            className="text-white no-underline hover:bg-[#d9d9d9] hover:text-[#6e3f41] transition duration-300 p-2 rounded"
+          </NavLink>
+          <NavLink
+            to="/admin/mathe"
+            className={({ isActive }) =>
+              `text-white no-underline transition duration-300 p-2 rounded ${
+                isActive
+                  ? "bg-[#d9d9d9] text-[#6e3f41]"
+                  : "hover:bg-[#d9d9d9] hover:text-[#6e3f41]"
+              }`
+            }
           >
             Mathe
-          </a>
-          <a
-            href="admin/customers"
-            className="text-white no-underline hover:bg-[#d9d9d9] hover:text-[#6e3f41] transition duration-300 p-2 rounded"
+          </NavLink>
+          <NavLink
+            to="/admin/customers"
+            className={({ isActive }) =>
+              `text-white no-underline transition duration-300 p-2 rounded ${
+                isActive
+                  ? "bg-[#d9d9d9] text-[#6e3f41]"
+                  : "hover:bg-[#d9d9d9] hover:text-[#6e3f41]"
+              }`
+            }
           >
             Customers
-          </a>
-          <a
-            href="admin/settings"
-            className="text-white no-underline hover:bg-[#d9d9d9] hover:text-[#6e3f41] transition duration-300 p-2 rounded"
+          </NavLink>
+          <NavLink
+            to="/admin/settings"
+            className={({ isActive }) =>
+              `text-white no-underline transition duration-300 p-2 rounded ${
+                isActive
+                  ? "bg-[#d9d9d9] text-[#6e3f41]"
+                  : "hover:bg-[#d9d9d9] hover:text-[#6e3f41]"
+              }`
+            }
           >
             Settings
-          </a>
+          </NavLink>
         </nav>
         <a
           href="/logout"
@@ -74,57 +123,16 @@ function AdminDash() {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-4 mb-6">
-          <div className="bg-white p-4 rounded shadow">
-            <h2 className="text-center">Orders requested</h2>
-            <div className="bg-maroon h-16 w-16 rounded-full mx-auto mt-4"></div>
-          </div>
-
-          <div className="bg-white p-4 rounded shadow">
-            <h2 className="text-center">Orders approved</h2>
-            <div className="bg-maroon h-16 w-16 rounded-full mx-auto mt-4"></div>
-          </div>
-
-          <div className="bg-white p-4 rounded shadow">
-            <h2 className="text-center">Orders completed</h2>
-            <div className="bg-maroon h-16 w-16 rounded-full mx-auto mt-4"></div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-3 gap-4 mb-6">
-          <div className="bg-white p-4 rounded shadow col-span-2">
-            <h2 className="text-center">Monthly Services Overview</h2>
-            <div
-              className="bg-cover h-32 w-full"
-              style={{ backgroundImage: "url('image-url.jpg')" }}
-            ></div>
-            <div className="grid grid-cols-2 gap-4 mt-4">
-              {Array(6)
-                .fill()
-                .map((_, i) => (
-                  <div key={i} className="text-center">
-                    <div className="bg-maroon h-8 w-8 rounded-full mx-auto mb-2"></div>
-                    <div>Users 100</div>
-                  </div>
-                ))}
-            </div>
-          </div>
-          <div className="grid grid-rows-2 gap-4 col-span-1">
-            <div className="bg-white p-4 rounded shadow">
-              <h2 className="text-center">July Income</h2>
-              <div className="flex justify-center items-center h-32">
-                <div className="border border-blue-500 rounded-full h-24 w-24 flex items-center justify-center"></div>
-              </div>
-            </div>
-
-            <div className="bg-white p-4 rounded shadow">
-              <h2 className="text-center">Ratings</h2>
-              <div className="text-center text-yellow-500 mt-2 text-xl">
-                4.5 ★★★★★
-              </div>
-            </div>
-          </div>
-        </div>
+        <Routes>
+          <Route path="/admin/dash" element={<AdminDashboard />} />
+          <Route path="/admin/orders" element={<Orders />} />
+          <Route path="/admin/registry" element={<Registry />} />
+          <Route path="/admin/delivery" element={<Delivery />} />
+          <Route path="/admin/mathe" element={<Mathe />} />
+          <Route path="/admin/customers" element={<Customers />} />
+          <Route path="/admin/settings" element={<Settings />} />
+        </Routes>
+        <Outlet />
       </main>
     </div>
   );
