@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../Home/Header";
 import image from "../../assets/images/image.png";
@@ -49,8 +49,11 @@ function LogIn() {
       <div className="h-screen bg-[#55d9ff]">
         <Header />
         <div className="flex">
-          <div className="w-1/2 flex justify-center p-5">
-            <form onSubmit={handleSubmit} className="w-full max-w-md">
+          <div className="w-1/2 flex justify-center p-5 items-center">
+            <form
+              onSubmit={handleSubmit}
+              className="w-full max-w-md text-white"
+            >
               <input
                 id="name"
                 name="name"
@@ -87,11 +90,11 @@ function LogIn() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="w-full p-2 mb-4 bg-[#6c3838] text-white rounded hover:bg-blue-600"
+                className="w-50 p-2 mb-4 bg-[#6c3838] text-white rounded hover:bg-blue-600 duration-300"
               >
                 {showPassword ? "Hide" : "Show"} Password
               </button>
-              <div className="w-36 flex justify-center p-2 ml-16 mt-12 bg-[#6c3838] text-white rounded hover:bg-blue-600">
+              <div className="w-36 flex justify-center p-2 ml-16 mt-12 bg-[#6c3838] text-white rounded hover:bg-blue-600 duration-300">
                 <button type="submit">Log In</button>
               </div>
               {error && (
@@ -99,7 +102,7 @@ function LogIn() {
               )}
             </form>
           </div>
-          <div className="w-1/2 flex justify-center">
+          <div className="w-1/2 flex justify-center md:p-2 object-cover">
             <img
               src={image}
               alt="Illustration"

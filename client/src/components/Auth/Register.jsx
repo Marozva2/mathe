@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../Home/Header";
 import image from "../../assets/images/image.png";
@@ -8,7 +8,7 @@ function Register() {
   const [name, setName] = useState("");
   const [contact, setContact] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
@@ -52,7 +52,6 @@ function Register() {
         <div className="flex">
           <div className="w-1/2 flex justify-center p-5">
             <form onSubmit={handleSubmit} className="w-full max-w-md">
-
               <h1 className="text-[#6c3838] text-center font-bold pb-4">
                 Create your account <br /> today to get a <br /> Perfect Wash
               </h1>
@@ -65,7 +64,7 @@ function Register() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
-                className="w-full p-2 mb-4 rounded bg-[#6c3838]"
+                className="w-full p-2 mb-4 rounded text-white bg-[#6c3838]"
                 autoComplete="name"
               />
 
@@ -77,7 +76,7 @@ function Register() {
                 value={contact}
                 onChange={(e) => setContact(e.target.value)}
                 required
-                className="w-full p-2 mb-4 rounded bg-[#6c3838]"
+                className="w-full p-2 mb-4 rounded text-white bg-[#6c3838]"
                 autoComplete="contact"
               />
 
@@ -89,7 +88,7 @@ function Register() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full p-2 mb-4 bg-[#6c3838] rounded"
+                className="w-full p-2 mb-4 bg-[#6c3838] rounded text-white"
                 autoComplete="email"
               />
 
@@ -101,14 +100,14 @@ function Register() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full p-2 mb-4 bg-[#6c3838] rounded"
+                className="w-full p-2 mb-4 bg-[#6c3838] rounded text-white"
                 autoComplete="current-password"
               />
 
               {/* <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="w-full p-2 mb-4 bg-[#6c3838] text-white rounded hover:bg-blue-600"
+                className="w-full p-2 mb-4 bg-[#6c3838] text-white rounded text-white hover:bg-blue-600"
               >
                 {showPassword ? "Hide" : "Show"} Password
               </button> */}
@@ -124,7 +123,7 @@ function Register() {
                 I have read the terms and conditions
               </div>
 
-              <div className="w-40 flex items-center justify-center p-2 ml-16 mt-12 bg-[#6c3838] text-white rounded hover:bg-blue-600 font-bold">
+              <div className="w-40 flex items-center justify-center p-2 ml-16 mt-12 bg-[#6c3838] text-white rounded hover:bg-blue-600 font-bold duration-300">
                 <button type="submit">Create Account</button>
               </div>
               {error && (
@@ -132,7 +131,7 @@ function Register() {
               )}
             </form>
           </div>
-          <div className="w-1/2 flex justify-center">
+          <div className="w-1/2 flex justify-center md:p-2">
             <img
               src={image}
               alt="Illustration"
