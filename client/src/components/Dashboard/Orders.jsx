@@ -4,10 +4,10 @@ import { FiEdit, FiEye } from "react-icons/fi";
 function Orders() {
   // Dummy data for orders
   const [orders] = useState([
-    { id: 1, name: "Order #1", date: "2024-08-01", status: "Delivered" },
-    { id: 2, name: "Order #2", date: "2024-07-29", status: "Pending" },
-    { id: 3, name: "Order #3", date: "2024-07-27", status: "Delivered" },
-    { id: 4, name: "Order #4", date: "2024-07-25", status: "Pending" },
+    { id: 1, name: "Order 1", date: "2024-08-01", status: "Delivered" },
+    { id: 2, name: "Order 2", date: "2024-07-29", status: "Pending" },
+    { id: 3, name: "Order 3", date: "2024-07-27", status: "Delivered" },
+    { id: 4, name: "Order 4", date: "2024-07-25", status: "Pending" },
   ]);
 
   useEffect(() => {
