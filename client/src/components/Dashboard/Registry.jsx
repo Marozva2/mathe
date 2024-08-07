@@ -1,12 +1,9 @@
-// Registry.jsx
-
-import { useState } from "react";
+// Import necessary hooks
+import { useState, useEffect } from "react";
 
 function Registry() {
-  // State to toggle the registration form
   const [isRegistering, setIsRegistering] = useState(false);
-  
-  // State to manage form data
+  const [registries, setRegistries] = useState([]); // State for registries
   const [formData, setFormData] = useState({
     name: "",
     contact: "",
@@ -15,7 +12,25 @@ function Registry() {
     phoneNumber: "",
   });
 
-  // Handle input changes
+  // Function to fetch registries from the API
+  const fetchRegistries = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/registries");
+      if (!response.ok) {
+        throw new Error("Failed to fetch registries");
+      }
+      const data = await response.json();
+      setRegistries(data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  // Fetch registries when the component mounts
+  useEffect(() => {
+    fetchRegistries();
+  }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -24,13 +39,11 @@ function Registry() {
     });
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      // Perform registration with API call
-      const response = await fetch("https://api.example.com/register", {
+      const response = await fetch("http://localhost:5000/registries", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -42,7 +55,6 @@ function Registry() {
         throw new Error("Registration failed");
       }
 
-      // Reset form data
       setFormData({
         name: "",
         contact: "",
@@ -51,9 +63,11 @@ function Registry() {
         phoneNumber: "",
       });
 
-      // Close the form
       setIsRegistering(false);
       alert("Registration successful!");
+
+      // Refresh registries after successful registration
+      fetchRegistries();
     } catch (error) {
       console.error("Error:", error);
       alert("Registration failed. Please try again.");
@@ -65,31 +79,31 @@ function Registry() {
       <h2 className="text-center text-xl font-bold mb-6">Registry</h2>
       {!isRegistering ? (
         <>
-          {/* Registry content goes here, e.g., a list of registered users */}
+          {/* Display list of registered users */}
           <div className="bg-white p-4 rounded shadow">
             <table className="w-full text-left">
               <thead>
                 <tr className="border-b">
                   <th className="px-4 py-2">ID</th>
                   <th className="px-4 py-2">Name</th>
-                  <th className="px-4 py-2">Date Registered</th>
-                  <th className="px-4 py-2">Status</th>
+                  <th className="px-4 py-2">Contact</th>
+                  <th className="px-4 py-2">Age</th>
+                  <th className="px-4 py-2">Phone Number</th>
                 </tr>
               </thead>
               <tbody>
-                <tr className="border-b hover:bg-gray-100 transition duration-300">
-                  <td className="px-4 py-2">1</td>
-                  <td className="px-4 py-2">John Doe</td>
-                  <td className="px-4 py-2">2024-08-01</td>
-                  <td className="px-4 py-2">Active</td>
-                </tr>
-                <tr className="border-b hover:bg-gray-100 transition duration-300">
-                  <td className="px-4 py-2">2</td>
-                  <td className="px-4 py-2">Jane Smith</td>
-                  <td className="px-4 py-2">2024-07-29</td>
-                  <td className="px-4 py-2">Inactive</td>
-                </tr>
-                {/* Add more rows as needed */}
+                {registries.map((registry) => (
+                  <tr
+                    key={registry.id}
+                    className="border-b hover:bg-gray-100 transition duration-300"
+                  >
+                    <td className="px-4 py-2">{registry.id}</td>
+                    <td className="px-4 py-2">{registry.name}</td>
+                    <td className="px-4 py-2">{registry.contact}</td>
+                    <td className="px-4 py-2">{registry.age}</td>
+                    <td className="px-4 py-2">{registry.phone_number}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -189,4 +203,3 @@ function Registry() {
 }
 
 export default Registry;
-

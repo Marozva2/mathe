@@ -2,18 +2,55 @@ import { useState, useEffect } from "react";
 import { FiEdit, FiEye } from "react-icons/fi";
 
 function Orders() {
-  // Dummy data for orders
-  const [orders] = useState([
-    { id: 1, name: "Order 1", date: "2024-08-01", status: "Delivered" },
-    { id: 2, name: "Order 2", date: "2024-07-29", status: "Pending" },
-    { id: 3, name: "Order 3", date: "2024-07-27", status: "Delivered" },
-    { id: 4, name: "Order 4", date: "2024-07-25", status: "Pending" },
-  ]);
+  const [orders, setOrders] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch orders from API or other sources here
-    // setOrders(fetchedOrders);
+    // Fetch orders from API
+    const fetchOrders = async () => {
+      try {
+        const response = await fetch("http://127.0.0.1:5000/orders");
+        const data = await response.json();
+
+        if (response.ok) {
+          setOrders(data);
+        } else {
+          setError("Failed to fetch orders.");
+        }
+      } catch (err) {
+        setError("An error occurred. Please try again later.");
+      } finally {
+        setLoading(false); // Set loading to false after the request completes
+      }
+    };
+
+    fetchOrders();
   }, []);
+
+  // Function to handle viewing an order
+  const handleViewOrder = (orderId) => {
+    console.log("Viewing order:", orderId);
+    // Redirect to order detail page
+    // navigate(`/order/${orderId}`);
+  };
+
+  // Function to handle editing an order
+  const handleEditOrder = (orderId) => {
+    console.log("Editing order:", orderId);
+    // Redirect to order edit page
+    // navigate(`/order/edit/${orderId}`);
+  };
+
+  // If loading, show loading message
+  if (loading) {
+    return <p className="text-center">Loading orders...</p>;
+  }
+
+  // If error exists, show error message
+  if (error) {
+    return <p className="text-red-500 text-center">{error}</p>;
+  }
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6 max-w-4xl mx-auto">
@@ -35,7 +72,7 @@ function Orders() {
               key={order.id}
               className="border-b hover:bg-gray-50 transition duration-300"
             >
-              <td className="px-4 py-2">{order.name}</td>
+              <td className="px-4 py-2">{order.id}</td>
               <td className="px-4 py-2">{order.date}</td>
               <td
                 className={`px-4 py-2 ${
@@ -47,11 +84,17 @@ function Orders() {
                 {order.status}
               </td>
               <td className="px-4 py-2 flex space-x-2">
-                <button className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition duration-300">
+                <button
+                  onClick={() => handleViewOrder(order.id)}
+                  className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition duration-300"
+                >
                   <FiEye className="inline-block mr-1" />
                   View
                 </button>
-                <button className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 transition duration-300">
+                <button
+                  onClick={() => handleEditOrder(order.id)}
+                  className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 transition duration-300"
+                >
                   <FiEdit className="inline-block mr-1" />
                   Edit
                 </button>
