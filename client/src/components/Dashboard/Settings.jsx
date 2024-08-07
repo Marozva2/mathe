@@ -1,15 +1,12 @@
-import { useState } from "react";
-import { FiUser, 
-  // FiLock, FiMail, FiPhone, 
-  FiUpload } from "react-icons/fi";
+import { useState, useEffect } from "react";
+import { FiUser, FiUpload } from "react-icons/fi";
 
 function Settings() {
-  // State for managing profile and account settings
   const [profileData, setProfileData] = useState({
     name: "John Doe",
     email: "john.doe@example.com",
     phone: "123-456-7890",
-    profilePicture: "", // URL or base64 image data
+    profilePicture: "",
   });
 
   const [accountSettings, setAccountSettings] = useState({
@@ -20,7 +17,15 @@ function Settings() {
     twoFactorAuth: false,
   });
 
-  // Handle profile input changes
+  // Replace this with actual user ID retrieval method
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    // Example: Fetch user ID from local storage or authentication context
+    const fetchedUserId = localStorage.getItem("userId");
+    setUserId(fetchedUserId);
+  }, []);
+
   const handleProfileChange = (e) => {
     const { name, value } = e.target;
     setProfileData({
@@ -29,7 +34,6 @@ function Settings() {
     });
   };
 
-  // Handle account settings changes
   const handleAccountChange = (e) => {
     const { name, value, type, checked } = e.target;
     setAccountSettings({
@@ -38,7 +42,6 @@ function Settings() {
     });
   };
 
-  // Handle profile picture upload
   const handleProfilePictureUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -53,24 +56,61 @@ function Settings() {
     }
   };
 
-  // Handle form submission
-  const handleSubmitProfile = (e) => {
+  const handleSubmitProfile = async (e) => {
     e.preventDefault();
-    // Here, you could make an API call to save profile changes
-    console.log("Profile data submitted:", profileData);
-    alert("Profile updated successfully!");
+    if (!userId) {
+      alert("User ID is not available.");
+      return;
+    }
+    try {
+      const response = await fetch(`/settings/${userId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: profileData.email,
+          username: profileData.name,
+        }),
+      });
+      if (!response.ok) throw new Error("Failed to update profile");
+      const result = await response.json();
+      console.log("Profile updated:", result);
+      alert("Profile updated successfully!");
+    } catch (error) {
+      console.error(error);
+      alert("Failed to update profile.");
+    }
   };
 
-  const handleSubmitAccount = (e) => {
+  const handleSubmitAccount = async (e) => {
     e.preventDefault();
-    // Validate password and handle account settings changes
+    if (!userId) {
+      alert("User ID is not available.");
+      return;
+    }
     if (accountSettings.newPassword !== accountSettings.confirmNewPassword) {
       alert("Passwords do not match!");
       return;
     }
-    // Here, you could make an API call to update account settings
-    console.log("Account settings submitted:", accountSettings);
-    alert("Account settings updated successfully!");
+    try {
+      const response = await fetch(`/settings/${userId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          password: accountSettings.newPassword,
+        }),
+      });
+      if (!response.ok) throw new Error("Failed to update account settings");
+      const result = await response.json();
+      console.log("Account settings updated:", result);
+      alert("Account settings updated successfully!");
+    } catch (error) {
+      console.error(error);
+      alert("Failed to update account settings.");
+    }
   };
 
   return (
@@ -207,34 +247,6 @@ function Settings() {
               />
             </div>
           </div>
-
-          {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
-            <div className="flex items-center justify-between">
-              <label className="text-[#6e3f41] font-semibold">
-                Email Notifications
-              </label>
-              <input
-                type="checkbox"
-                name="emailNotifications"
-                checked={accountSettings.emailNotifications}
-                onChange={handleAccountChange}
-                className="form-checkbox h-5 w-5 text-[#6e3f41]"
-              />
-            </div>
-
-            <div className="flex items-center justify-between">
-              <label className="text-[#6e3f41] font-semibold">
-                Two-Factor Authentication
-              </label>
-              <input
-                type="checkbox"
-                name="twoFactorAuth"
-                checked={accountSettings.twoFactorAuth}
-                onChange={handleAccountChange}
-                className="form-checkbox h-5 w-5 text-[#6e3f41]"
-              />
-            </div>
-          </div> */}
 
           <div className="text-center mt-6">
             <button
