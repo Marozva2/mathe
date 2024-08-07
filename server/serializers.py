@@ -1,7 +1,7 @@
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 from marshmallow import fields
 
-from models import User, Address, LaundryItem, Order, OrderItem
+from models import User, Address, LaundryItem, Order, OrderItem, Delivery, Registry
 
 
 class UserSchema(SQLAlchemyAutoSchema):
@@ -32,4 +32,14 @@ class OrderSchema(SQLAlchemyAutoSchema):
 class OrderItemSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = OrderItem
+        include_relationships = True
+
+class DeliverySchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = Delivery
+        include_relationships = True
+
+class RegistrySchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = Registry
         include_relationships = True

@@ -1,4 +1,4 @@
-from models import db, User, Address, LaundryItem, Order, OrderItem, Email
+from models import db, User, Address, LaundryItem, Order, OrderItem, Email, Delivery
 
 from app import create_app
 
@@ -17,7 +17,8 @@ def seed_database():
         # Seed data for User model
         users = [{
             "id": 1,
-            "username": "bredan",
+            "name": "bredan",
+            "contact": "747",
             "email": "bredan@gmail.com",
             "password": "1234"
         }]
@@ -67,6 +68,22 @@ def seed_database():
             order = Order(**order_data)
             db.session.add(order)
             print("Orders added")
+
+        deliveries = [{
+            "id": 1,
+            "order_id": 1,
+            "user_id": 1,
+            "delivery_date": "2021-06-20",
+            "delivery_time": "06:20",
+            "status": "",
+            "location": "NYC",
+            "apartment_name": "Rafiki"
+        }]
+
+        for delivery_data in deliveries:
+            delivery = Delivery(**delivery_data)
+            db.session.add(delivery)
+            print("Delivery added")
 
         # Seed data for OrderItem model
         order_items = [{

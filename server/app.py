@@ -15,6 +15,9 @@ from routes.order_bp import order_bp
 from routes.orderitem_bp import orderitem_bp
 from routes.home_bp import home_bp
 from routes.mail import mail_bp
+from routes.delivery_bp import delivery_bp
+from routes.registry_bp import registry_bp
+from routes.settings_bp import settings_bp
 
 
 def create_app():
@@ -46,6 +49,9 @@ def create_app():
     app.register_blueprint(orderitem_bp)
     app.register_blueprint(home_bp)
     app.register_blueprint(mail_bp)
+    app.register_blueprint(delivery_bp)
+    app.register_blueprint(registry_bp)
+    app.register_blueprint(settings_bp)
 
     CORS(app, resources={r"*": {"origins": "*"}})
     return app
