@@ -8,14 +8,27 @@ function Register() {
   const [name, setName] = useState("");
   const [contact, setContact] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword] = useState(false);
+  const [confirm, setConfirm] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (password !== confirm) {
+      setError("Passwords do not match");
+      return;
+    }
+
     try {
-      const formData = { email, password };
+      const formData = {
+        name,
+        contact,
+        email,
+        password,
+        confirmPassword: confirm,
+      };
 
       const response = await fetch("http://127.0.0.1:5000/register", {
         method: "POST",
@@ -31,16 +44,14 @@ function Register() {
           localStorage.setItem("accessToken", data.access_token);
           localStorage.setItem("userId", data.user_id);
           setError(null);
-          navigate("/dashboard"); // Redirect to dashboard on successful login
-          return; // Exit the function after redirection
-        } else {
-          setError("Invalid email or password.");
+          navigate("/dashboard");
+          return;
         }
       } else {
-        setError("An error occurred. Please try again later.");
+        setError(data.detail || "An error occurred. Please try again later.");
       }
     } catch (err) {
-      console.error("Login error:", err);
+      console.error("Registration error:", err);
       setError("An error occurred. Please try again later.");
     }
   };
@@ -71,7 +82,7 @@ function Register() {
               <input
                 id="contact"
                 name="contact"
-                type="number"
+                type="text"
                 placeholder="Contact:"
                 value={contact}
                 onChange={(e) => setContact(e.target.value)}
@@ -104,13 +115,25 @@ function Register() {
                 autoComplete="current-password"
               />
 
-              {/* <button
+              <input
+                id="confirm-password"
+                name="confirmPassword"
+                type={showPassword ? "text" : "password"}
+                placeholder="Confirm Password:"
+                value={confirm}
+                onChange={(e) => setConfirm(e.target.value)}
+                required
+                className="w-full p-2 mb-4 bg-[#6c3838] rounded text-white"
+                autoComplete="current-password"
+              />
+
+              <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="w-full p-2 mb-4 bg-[#6c3838] text-white rounded text-white hover:bg-blue-600"
+                className="w-full p-2 mb-4 bg-[#6c3838] text-white rounded hover:bg-blue-600"
               >
                 {showPassword ? "Hide" : "Show"} Password
-              </button> */}
+              </button>
 
               <div className="font-bold">
                 <input
