@@ -23,15 +23,26 @@ function LogIn() {
       });
 
       const data = await response.json();
-      console.log(data);
+      console.log("Response Data:", data);
 
       if (response.ok) {
         if (data.access_token) {
           localStorage.setItem("accessToken", data.access_token);
           localStorage.setItem("userId", data.user_id);
+          localStorage.setItem("isAdmin", data.is_admin);
           setError(null);
-          navigate("/dashboard"); // Redirect to dashboard on successful login
-          return; // Exit the function after redirection
+
+          console.log("Stored Token:", localStorage.getItem("accessToken"));
+          console.log("Stored UserID:", localStorage.getItem("userId"));
+          console.log("Stored IsAdmin:", localStorage.getItem("isAdmin"));
+
+          if (data.is_admin) {
+            console.log("Redirecting to /admin/dash");
+            navigate("/admin/dash");
+          } else {
+            console.log("Redirecting to /dashboard");
+            navigate("/dashboard");
+          }
         } else {
           setError("Invalid email or password.");
         }
