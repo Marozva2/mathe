@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { FiEdit, FiEye } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 
 function Orders() {
   const [orders, setOrders] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch orders from API
     const fetchOrders = async () => {
       try {
         const response = await fetch("http://127.0.0.1:5000/orders");
@@ -21,33 +22,25 @@ function Orders() {
       } catch (err) {
         setError("An error occurred. Please try again later.");
       } finally {
-        setLoading(false); // Set loading to false after the request completes
+        setLoading(false);
       }
     };
 
     fetchOrders();
   }, []);
 
-  // Function to handle viewing an order
   const handleViewOrder = (orderId) => {
-    console.log("Viewing order:", orderId);
-    // Redirect to order detail page
-    // navigate(`/order/${orderId}`);
+    navigate(`/order/${orderId}`);
   };
 
-  // Function to handle editing an order
   const handleEditOrder = (orderId) => {
-    console.log("Editing order:", orderId);
-    // Redirect to order edit page
-    // navigate(`/order/edit/${orderId}`);
+    navigate(`/order/edit/${orderId}`);
   };
 
-  // If loading, show loading message
   if (loading) {
     return <p className="text-center">Loading orders...</p>;
   }
 
-  // If error exists, show error message
   if (error) {
     return <p className="text-red-500 text-center">{error}</p>;
   }

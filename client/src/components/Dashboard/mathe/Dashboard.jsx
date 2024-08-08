@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Chart from "chart.js/auto";
 
@@ -8,24 +8,25 @@ function Dashboard() {
   const statusChartInstanceRef = useRef(null);
   const navigate = useNavigate();
 
+  const storedUserId = localStorage.getItem("userId");
+  const storedAccessToken = localStorage.getItem("accessToken");
+
   useEffect(() => {
-    const userId = localStorage.getItem("userId");
-    if (userId) {
-      fetch(`http://127.0.0.1:5000/user/${userId}`)
+    if (storedUserId) {
+      fetch(`http://127.0.0.1:5000/user/${storedUserId}`)
         .then((response) => response.json())
         .then((data) => setUserData(data))
         .catch((error) => console.error("Error fetching user data:", error));
     } else {
       console.error("User ID not found in local storage.");
     }
-  }, []);
+  }, [storedUserId, setUserData]);
 
   useEffect(() => {
-    const userId = localStorage.getItem("userId");
-    if (userId) {
-      fetch(`http://127.0.0.1:5000/laundryitem/${userId}`, {
+    if (storedUserId) {
+      fetch(`http://127.0.0.1:5000/laundryitem/${storedUserId}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          Authorization: `Bearer ${storedAccessToken}`,
         },
       })
         .then((response) => {
@@ -61,7 +62,7 @@ function Dashboard() {
     } else {
       console.error("User ID not found in local storage.");
     }
-  }, [localStorage.getItem("userId")]);
+  }, [storedUserId, storedAccessToken]);
 
   useEffect(() => {
     const canvas = document.getElementById("statusChart");
@@ -208,77 +209,50 @@ function Dashboard() {
             </div>
           </li>
         </ul>
-        <div className="mt-auto">
+        <div className="py-2">
           <button
+            className="w-full bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded transition duration-300"
             onClick={handleLogout}
-            className="flex items-center hover:bg-gray-700 py-2 transition duration-300"
           >
-            <svg
-              className="h-6 w-6 mr-2 text-red-500"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M15 19h-2V7h2v12zM12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9s9-4.03 9-9s-4.03-9-9-9zm0 16c-3.86 0-7-3.14-7-7s3.14-7 7-7s7 3.14 7 7s-3.14 7-7 7z"
-                fill="currentColor"
-              />
-            </svg>
             Logout
           </button>
         </div>
       </nav>
-      <main className="flex-grow p-8">
-        <h1 className="text-2xl md:text-3xl font-bold mb-4 transition duration-300">
-          Dashboard
-        </h1>
-        {userData ? (
-          <div>
-            <h2 className="text-lg md:text-xl font-semibold mb-2 transition duration-300">
-              Welcome, {userData.username}!!!
-            </h2>
-            <p className="text-gray-700 transition duration-300">
-              Email: {userData.email}
-            </p>
+      <main className="flex-grow p-10 bg-white rounded-lg shadow-md m-5">
+        <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
-              <div className="bg-white rounded p-2 md:p-4 transform hover:scale-105 transition duration-300">
-                <h2 className="text-lg md:text-xlg font-bold mb-2 underline transition duration-300">
-                  Recent Activity
-                </h2>
-                <div>
-                  {recentActivity.map((activity, index) => (
-                    <div key={index} className="mb-2">
-                      <p className="font-semibold">Number:{activity.title}</p>
-                      Description:{" "}
-                      <p className="text-gray-700">{activity.description}</p>
-                      <p className="text-sm text-gray-500">
-                        Date: {activity.timestamp.substring(0, 10)}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="bg-white rounded p-2 md:p-4 transform hover:scale-105 transition duration-300">
-                <h2 className="text-lg md:text-xlg font-bold mb-2 underline transition duration-300">
-                  Status
-                </h2>
-                <canvas id="statusChart"></canvas>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-1 gap-3 mt-4">
-              <div className="bg-white rounded p-4 transform hover:scale-104 transition duration-300">
-                <h2 className="text-xlg font-bold mb-8 underline transition duration-300">
-                  More Activities
-                </h2>
-                <canvas id="chart1"></canvas>
-              </div>
-            </div>
+        {/* Display user data if available */}
+        {userData && (
+          <div className="mb-4">
+            <h2 className="text-xl font-semibold">Welcome, {userData.name}!</h2>
+            <p>Email: {userData.email}</p>
           </div>
-        ) : (
-          <p>Loading user data...</p>
         )}
+
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-semibold">Status Chart</h2>
+          <button className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded transition duration-300">
+            Change Status
+          </button>
+        </div>
+        <canvas id="statusChart" width="400" height="200"></canvas>
+
+        <div className="mt-6">
+          <h2 className="text-xl font-semibold mb-2">Recent Activity</h2>
+          <ul>
+            {recentActivity.map((activity, index) => (
+              <li key={index} className="mb-2">
+                <div className="bg-gray-100 p-4 rounded-lg shadow">
+                  <h3 className="text-lg font-semibold">{activity.title}</h3>
+                  <p>{activity.description}</p>
+                  <span className="text-sm text-gray-500">
+                    {activity.timestamp}
+                  </span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
       </main>
     </div>
   );
