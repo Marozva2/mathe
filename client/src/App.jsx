@@ -1,6 +1,7 @@
+// src/App.js
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LandingPage from "./components/Home/LandingPage";
-import Dashboard from "./components/Dashboard/mathe/Dashboard";
 import LogIn from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
 import Logout from "./components/Auth/Logout";
@@ -19,10 +20,15 @@ import AdminDashboard from "./components/Dashboard/Admin/AdminDashboard";
 import OrderView from "./components/Dashboard/Admin/Orderview";
 import OrderEdit from "./components/Dashboard/Admin/OrderEdit";
 import ProtectedRoute from "./components/Auth/ProtectedRoute";
+import RateMathe from "./components/Dashboard/User/RateMathe";
+import RouteUser from "./components/Dashboard/User/RouteUser";
+import Rate from "./components/Dashboard/User/Rate";
+import Service from "./components/Dashboard/User/OrderService";
 
 function App() {
   return (
     <Router>
+      {/* Main Routes */}
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<LandingPage />} />
@@ -30,6 +36,18 @@ function App() {
         <Route path="/login" element={<LogIn />} />
         <Route path="/register" element={<Register />} />
         <Route path="/logout" element={<Logout />} />
+
+        {/* Service Routes */}
+        <Route path="/laundry" element={<Laundry />} />
+        <Route path="/lawning" element={<Lawning />} />
+        <Route path="/plumbing" element={<Plumbing />} />
+
+        {/* User Dashboard Routes */}
+        <Route path="/user/*" element={<RouteUser />}>
+          <Route path="rate" element={<Rate />} />
+          <Route path="order-status" element={<Service />} />
+          <Route path="view-ratings" element={<RateMathe />} />
+        </Route>
 
         {/* Admin Dashboard Routes */}
         <Route
@@ -50,19 +68,6 @@ function App() {
           <Route path="customers" element={<Customers />} />
           <Route path="settings" element={<Settings />} />
         </Route>
-
-        {/* User Dashboard Routes */}
-        <Route
-          path="/dashboard/*"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="laundry" element={<Laundry />} />
-        <Route path="lawning" element={<Lawning />} />
-        <Route path="plumbing" element={<Plumbing />} />
       </Routes>
     </Router>
   );
