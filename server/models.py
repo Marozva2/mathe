@@ -7,14 +7,18 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
-    contact = db.Column(db.Integer)
+    contact = db.Column(db.String)
     email = db.Column(db.String, unique=True)
     password = db.Column(db.String)
-    
+    is_admin = db.Column(db.Boolean, default=False)
+
     orders = db.relationship('Order', backref='customer', lazy='dynamic')
     addresses = db.relationship('Address', backref='resident', lazy='dynamic')
     laundryitems = db.relationship('LaundryItem', backref='owner', lazy='dynamic')
     deliveries = db.relationship('Delivery', backref='deliverer', lazy='dynamic')
+
+    def __repr__(self):
+        return f"User(id={self.id}, name={self.name}, is_admin={self.is_admin})"
 
 class Address(db.Model):
     __tablename__ = 'addresses'
@@ -26,7 +30,7 @@ class Address(db.Model):
     state = db.Column(db.String)
     zip_code = db.Column(db.String)
 
-    orders = db.relationship('Order', backref='address', lazy='dynamic')  # Added this line
+    orders = db.relationship('Order', backref='address', lazy='dynamic')
 
 class LaundryItem(db.Model):
     __tablename__ = 'laundryitems'
@@ -68,8 +72,6 @@ class Delivery(db.Model):
     location = db.Column(db.String)
     apartment_name = db.Column(db.String)
 
-    # Removed the order and user relationships as they are already handled by foreign keys
-
 class Email(db.Model):
     __tablename__ = 'emails'
 
@@ -105,3 +107,14 @@ class Registry(db.Model):
     police_clearance = db.Column(db.String)
     phone_number = db.Column(db.String)
     status = db.Column(db.String, default='Pending')  # e.g., 'Approved', 'Rejected'
+
+class Mathe(db.Model):
+    __tablename__ = 'mathe'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    phone_number = db.Column(db.String)
+    profile_photo = db.Column(db.String)
+    service = db.Column(db.String)
+    location = db.Column(db.String)
+    pricing = db.Column(db.Integer)

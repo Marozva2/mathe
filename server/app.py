@@ -18,6 +18,7 @@ from routes.mail import mail_bp
 from routes.delivery_bp import delivery_bp
 from routes.registry_bp import registry_bp
 from routes.settings_bp import settings_bp
+from routes.mathe_bp import mathe_bp
 
 
 def create_app():
@@ -52,6 +53,7 @@ def create_app():
     app.register_blueprint(delivery_bp)
     app.register_blueprint(registry_bp)
     app.register_blueprint(settings_bp)
+    app.register_blueprint(mathe_bp)
 
     CORS(app, resources={r"*": {"origins": "*"}})
     return app
